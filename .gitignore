@@ -25,3 +25,6 @@ docs/
 *.swo
 *~
 AGENT*.md
+
+_internal_docs/
+.venv/
