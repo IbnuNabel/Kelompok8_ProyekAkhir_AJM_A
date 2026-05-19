@@ -78,7 +78,7 @@ class MultipathSPFController(SPFBaseController):
                 dec.append((n_path[-1], in_port, final_port))
                 decorated_paths.append(dec)
                 
-        self.logger.info("[MP-COMPUTE] %s->%s found %d path(s)", src, dst, len(decorated_paths))
+        self.logger.info("[MP-COMPUTE] %s->%s found %d path(s): %s", src, dst, len(decorated_paths), decorated_paths)
         return decorated_paths
 
     def install_multipath(self, paths, src_mac, dst_mac, weights=None):
@@ -227,7 +227,7 @@ if __name__ == '__main__':
     try:
         from os_ken.cmd.manager import main
         # Cara lama: panggil osken-manager dan teruskan argumen
-        sys.argv = ['osken-manager'] + apps_to_load
+        sys.argv = ['osken-manager', '--observe-links'] + apps_to_load
         sys.exit(main())
     except ImportError:
         # Pendekatan baru untuk os-ken >= 4.2.0

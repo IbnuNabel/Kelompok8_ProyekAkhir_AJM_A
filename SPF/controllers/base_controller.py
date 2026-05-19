@@ -376,7 +376,7 @@ class SPFBaseController(app_manager.OSKenApp):
         if weights is None:
             weights = [5] * len(unique_ports) # Mode Equal (misal 50:50)
         elif len(weights) != len(unique_ports):
-            self.logger.error("[ECMP-GROUP] weights length mismatch")
+            self.logger.error("[ECMP-GROUP] weights length mismatch: weights=%s, unique_ports=%s", weights, unique_ports)
             weights = [5] * len(unique_ports)
 
         buckets = [
@@ -636,15 +636,15 @@ class SPFBaseController(app_manager.OSKenApp):
             all_ports = {p.port_no for p in getattr(sw, "ports", [])}
             self.access_ports[sw.dp.id] = all_ports - inter_switch[sw.dp.id]
 
-        new_adj = defaultdict(list)
+        new_adj = defaultdict(set)
         new_port_map = {}
         for s1, s2, p1, p2 in new_links:
-            new_adj[s1].append((s2, p1))
-            new_adj[s2].append((s1, p2))
+            new_adj[s1].add((s2, p1))
+            new_adj[s2].add((s1, p2))
             new_port_map[(s1, s2)] = p1
             new_port_map[(s2, s1)] = p2
 
-        self.adjacency = new_adj
+        self.adjacency = {k: list(v) for k, v in new_adj.items()}
         self.port_map = new_port_map
 
         old_sig = self.topology_signature

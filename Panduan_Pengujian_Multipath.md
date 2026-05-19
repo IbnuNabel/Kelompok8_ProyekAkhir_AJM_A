@@ -7,13 +7,13 @@ Dokumen ini memuat langkah-langkah untuk menyiapkan *environment*, menjalankan *
 Karena kamu sudah membuat *virtual environment* menggunakan `uv` (yaitu folder `.venv`), pastikan *environment* tersebut sudah aktif di terminal kamu (VSCode biasanya mendeteksi secara otomatis).
 
 ### Langkah Aktivasi (Jika Belum Aktif):
-**Di Windows (Command Prompt / PowerShell):**
+**Di Linux / Dev Container (Terminal VS Code):**
 ```bash
-.venv\Scripts\activate
+source .venv/bin/activate
 ```
 
 ### Instalasi Dependensi:
-Karena kita menggunakan basis controller `osken`, jalankan perintah berikut untuk menginstal seluruh pustaka yang dibutuhkan:
+Karena kita menggunakan basis controller `osken`, jalankan perintah berikut untuk menginstal seluruh pustaka yang dibutuhkan (jika `uv` belum terinstal, jalankan `pip install uv` terlebih dahulu, atau gunakan `pip install osken eventlet`):
 ```bash
 uv pip install osken eventlet
 ```
@@ -24,36 +24,27 @@ uv pip install osken eventlet
 
 Kita tidak menjalankan `base_controller.py` secara langsung karena file tersebut adalah *abstract base class* (kerangka dasar). Kita akan langsung menjalankan file turunan yang sudah kita buat, yaitu `multipath_spf.py`.
 
-Buka terminal (pastikan venv masih aktif), dan jalankan:
+Buka terminal VS Code (yang sudah ada di dalam Dev Container, pastikan venv aktif), dan jalankan dari direktori utama proyek:
 ```bash
-python controllers/multipath_spf.py
+python SPF/controllers/multipath_spf.py
 ```
 > **Catatan**: Script ini otomatis memanggil `osken-manager` di balik layar dan langsung memuat modul pencarian topologi (`--observe-links`). Kamu akan melihat log controller menyala dan bersiap menerima koneksi dari switch.
 
 ---
 
-## 3. Menjalankan Emulator Mininet (via Docker)
+## 3. Menjalankan Emulator Mininet
 
-Kita menggunakan Docker untuk menjalankan Mininet agar *environment* lebih stabil dan konsisten.
+Karena kamu sudah menggunakan fitur **Dev Container** di VS Code, kamu sudah berada di dalam lingkungan Linux (Docker) secara otomatis. Tidak perlu lagi memanggil `docker compose` atau `docker exec` secara manual!
 
-**Langkah 1: Jalankan Container Mininet**
-Buka terminal baru di direktori proyek ini (pastikan Docker Desktop sudah menyala), lalu jalankan:
+**Langkah 1: Buka Terminal Baru**
+Buka tab terminal baru di VS Code (tekan tombol `+` pada panel terminal).
+
+**Langkah 2: Jalankan Topologi Mininet**
+Jalankan topologi `diamond` menggunakan *script* kustom dari proyek kita. Karena *controller* dan Mininet berjalan di container yang sama, cukup gunakan IP `127.0.0.1` (localhost):
 ```bash
-docker compose up -d
+sudo mn --custom /workspaces/learn_sdn/SPF/topologies/topo-diamond_lab.py --topo diamond --controller remote,ip=127.0.0.1,port=6653 --mac --switch ovsk,protocols=OpenFlow13
 ```
-
-**Langkah 2: Masuk ke Shell Mininet**
-Setelah *container* berjalan, masuk ke dalam terminal *container* tersebut dengan perintah:
-```bash
-docker exec -it mininet-emulator bash
-```
-
-**Langkah 3: Jalankan Topologi Mininet**
-Setelah masuk ke *shell* container, jalankan topologi `diamond` (direktori `/topologies` sudah ter-mount otomatis dari Windows). Pastikan menggunakan IP `host.docker.internal` agar terhubung ke controller di Windows:
-```bash
-mn --custom /topologies/topo-diamond_lab.py --topo diamond --controller remote,ip=host.docker.internal,port=6653 --mac --switch ovsk,protocols=OpenFlow13
-```
-*(Catatan: Kamu juga bisa mencoba topologi lain dengan argumen `--custom /topologies/topo-partial_mesh_lab.py --topo partial_mesh`).*
+*(Catatan: Kamu juga bisa mencoba topologi lain dengan argumen `--custom /workspaces/learn_sdn/SPF/topologies/topo-partial_mesh_lab.py --topo partial_mesh`).*
 
 Jika berhasil, Mininet akan memunculkan *prompt* CLI seperti ini:
 ```text
@@ -79,15 +70,15 @@ Semua *host* harus bisa terhubung. Saat *ping* ini berjalan, controller kita (`m
   `[MP-INSTALL] ... paths=2 group=1 weights=[7, 3]`
 
 ### B. Memverifikasi OpenFlow Group Entries
-Untuk memastikan bahwa bobot 70:30 benar-benar disuntikkan ke dalam *switch*, jalankan perintah ini di dalam container Mininet (buka terminal baru dan jalankan `docker exec -it mininet-emulator bash` jika kamu sedang berada di prompt `mininet>`), untuk melihat *Group Table* di *ingress switch* (misalnya `s1`):
+Untuk memastikan bahwa bobot 70:30 benar-benar disuntikkan ke dalam *switch*, cukup buka tab terminal VS Code yang baru (karena kamu sudah di dalam Dev Container), lalu jalankan perintah ini untuk melihat *Group Table* di *ingress switch* (misalnya `s1`):
 ```bash
-dpctl dump-groups
+mininet> dpctl dump-groups -O OpenFlow13
 ```
-Atau jika tidak ada `dpctl`, kamu bisa menggunakan:
+Atau jika tidak berada di dalam Mininet CLI, kamu bisa menggunakan perintah bash:
 ```bash
-ovs-ofctl -O OpenFlow13 dump-groups s1
+sudo ovs-ofctl -O OpenFlow13 dump-groups s1
 ```
-Kamu akan melihat output `type=select`. Di bagian *buckets*, kamu harusnya melihat dua buah *bucket*, yang satu memiliki `weight=7` dan yang satu lagi `weight=3`.
+Kamu akan melihat output `type=select`. Di bagian *buckets*, kamu harusnya melihat dua buah *bucket*, yang satu memiliki `weight:7` dan yang satu lagi `weight:3`.
 
 ### C. Uji Throughput (Opsional / Tugas Aero)
 Untuk melihat secara riil pembagian trafik, kamu bisa menjalankan *iperf* secara paralel atau melihat grafik telemetri (jika rekanmu Aero sudah menyiapkannya):

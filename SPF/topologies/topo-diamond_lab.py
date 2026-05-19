@@ -90,6 +90,11 @@ def run():
     net.stop()
 
 
+topos = {
+    'diamond': DiamondTopo
+}
+
+
 if __name__ == "__main__":
     setLogLevel("info")
     run()
