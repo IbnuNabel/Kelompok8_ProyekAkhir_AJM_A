@@ -11,7 +11,7 @@
 
 Repositori ini berisi implementasi, konfigurasi lingkungan eksperimen, serta evaluasi performa tiga algoritme perutean, yaitu **Dijkstra Multipath**, **Bellman-Ford Multipath**, dan **Suurballe Disjoint Paths**, pada arsitektur *Software-Defined Networking* (SDN).
 
-Implementasi memanfaatkan *Control Plane* berbasis **OSKen Controller** dan *Data Plane* berbasis **Mininet Emulator** dengan dukungan protokol **OpenFlow 1.3**. Fokus penelitian adalah membandingkan karakteristik ketiga algoritme terhadap beberapa metrik kinerja jaringan, seperti waktu komputasi jalur, throughput, keseimbangan distribusi trafik (*load balancing*), dan ketahanan terhadap kegagalan jalur.
+Implementasi memanfaatkan *Control Plane* berbasis **OSKen Controller** dan *Data Plane* berbasis **Mininet Emulator** dengan dukungan protokol **OpenFlow 1.3**. Fokus penelitian adalah membandingkan karakteristik ketiga algoritme terhadap beberapa metrik kinerja jaringan, seperti waktu komputasi jalur, throughput, dan keseimbangan distribusi trafik (*load balancing*).
 
 ---
 
