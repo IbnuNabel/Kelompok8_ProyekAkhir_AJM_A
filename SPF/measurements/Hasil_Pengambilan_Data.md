@@ -77,8 +77,8 @@
 
 | Kondisi |Src  |Dst |Max |Avg |Mdev|Loss (%)
 |--|--|--|--|--|--|-
-| Idle | h1 |h4 ||||0
-| Idle | h2 |h3 ||||0
+| Idle | h1 |h4 |32.2|9.3836|7.2142|0
+| Idle | h2 |h3 |29.9|9.58|32.478|0
 
 2. Tabel 2 - Throughput 
 
@@ -102,8 +102,8 @@
 
 | Kondisi |Src  |Dst |Max |Avg |Mdev|Loss (%)
 |--|--|--|--|--|--|-
-| Idle | h1 |h4 ||||0
-| Idle | h2 |h3 ||||0
+| Idle | h1 |h4 |32.1|9.297|7.182|0
+| Idle | h2 |h3 |35.5|9.552|8.252|0
 
 2. Tabel 2 - Throughput 
 
