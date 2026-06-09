@@ -18,7 +18,7 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
 | s1| Port 3|Jalur A |4046|37691837|37687791|37,6|50.001
 | s1 | Port 4 |Jalur B |3850|37689161|37685311|37,6|49.999
@@ -42,7 +42,7 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
 | s1| Port 3|Jalur A |1586|29547385|29545799|29,5|53.3
 | s1 | Port 4 |Jalur B |1390|25870121|25868731|25,8|46.6
@@ -66,7 +66,7 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
 | s1| Port 3|Jalur A |1668|26789169|26787501|26,7|46.7
 | s1 | Port 4 |Jalur B |1336|30462697|30461361|30,4|53.2
@@ -91,7 +91,7 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
 | s1| Port 3|Jalur A |1466|21928672|21927206|21,9|52.678
 | s1 | Port 4 |Jalur B |1330|19696880|19695550|19,6|47.316
@@ -116,7 +116,7 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
 | s1| Port 3|Jalur A |1526|29936327|29934801|29,9|53.266
 | s1 | Port 4 |Jalur B |1330|26261881|26260551|26,6|46.728
@@ -141,8 +141,8 @@
 
 3. Tabel 3 - Load Balancing 
 
-| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|Loss (%)
+| Switch|Port  |Jalur|Tx Bytes BEFORE|Tx Bytes After |Delta (bytes)|Delta (MB)|% dari Total
 |--|--|--|--|--|--|--|-
-| s1| Port 3|Jalur A |1074|194653706|194652632|29,9|66.595
-| s1 | Port 4 |Jalur B |1112|97639904|97638792|33.4043
-| s1 | Port 5 |Jalur C |1564|3894|2330|0,0034|0.0007
+| s1| Port 3|Jalur A |1074|194653706|194652632|194,6|66.595
+| s1 | Port 4 |Jalur B |1112|97639904|97638792|97,6|33.4043
+| s1 | Port 5 |Jalur C |1564|3894|2330|0,0023|0.0007
