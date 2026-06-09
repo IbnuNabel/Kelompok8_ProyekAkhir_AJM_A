@@ -19,11 +19,9 @@ Implementasi memanfaatkan *Control Plane* berbasis **OSKen Controller** dan *Dat
 
 Penelitian ini bertujuan untuk:
 
-1. Mengimplementasikan algoritme Dijkstra, Bellman-Ford, dan Suurballe pada lingkungan SDN.
-2. Mengembangkan mekanisme multipath menggunakan fitur OpenFlow Group Table.
-3. Mengevaluasi performa masing-masing algoritme pada berbagai skenario topologi jaringan.
-4. Menganalisis efektivitas Equal-Cost Multipath (ECMP) dan jalur *edge-disjoint* dalam meningkatkan utilisasi jaringan.
-5. Membandingkan karakteristik algoritme berdasarkan metrik throughput, latency, dan distribusi beban trafik.
+1. Membandingkan efisiensi waktu komputasi internal controller antara algoritme Dijkstra, Bellman-Ford, dan Suurballe dalam menghasilkan rute majemuk (mutipath) pada kondisi tabel flow kosong di Topologi Diamond dan Partial Mesh.
+2. Mengevaluasi kinerja bandwidth throughput yang dihasilkan oleh ketiga algoritme perutean multipath tersebut saat melayani lalu lintas data di kedua bentuk topologi jaringan.
+3. Menganalisis efektivitas distribusi load-balancing dari masing-masing algoritme dalam membagi beban trafik melalui jalur-jalur alternatif yang tersedia.
 
 ---
 
@@ -52,71 +50,34 @@ Setiap switch OpenFlow berfungsi sebagai perangkat forwarding yang menerima atur
 
 ```text
 Kelompok8_ProyekAkhir_AJM_A/
-├── .devcontainer/
-│   └── ...
-│
-├── scripts/
-│   └── ...
-│
-├── SPF/
-│   ├── algorithms/
+├── .devcontainer/                # Konfigurasi isolasi lingkungan kerja VS Code
+├── scripts/                      # Skrip utilitas tambahan pendukung pengujian
+├── SPF/                          # Core source code proyek SDN
+│   ├── algorithms/               # Pustaka murni logika matematika pencarian rute
 │   │   ├── __init__.py
-│   │   ├── bellman_ford.py
-│   │   ├── dijkstra.py
-│   │   └── suurballe.py
-│   │
-│   ├── controllers/
-│   │   ├── __init__.py
-│   │   ├── multipath_spf.py
-│   │   ├── shortest_path.py
-│   │   └── test_group_mod.py
-│   │
-│   └── topologies/
-│       ├── __init__.py
-│       ├── topo-diamond_lab.py
-│       └── topo-partial_mesh_lab.py
-│
-├── Dockerfile
-├── docker-compose.yml
-├── entrypoint.sh
-├── README.md
-└── PANDUAN_PENGUJIAN_SUURBALLE.md
+│   │   ├── bellman_ford.py       # Pustaka rute dasar Bellman-Ford
+│   │   ├── dijkstra.py           # Pustaka rute dasar Dijkstra
+│   │   └── suurballe.py          # Pustaka rute dinamis lintasan saling lepas
+│   ├── controllers/              # Berkas pengendali interkoneksi OpenFlow 1.3
+│   │   ├── base_controller.py
+│   │   ├── multipath_dijkstra.py    # Logika komputasi rute multipath Dijkstra
+│   |   ├── multipath_bellman.py     # Logika komputasi rute multipath Bellman-Ford
+│   |   └── multipath_suurballe.py   # Logika pencarian lintasan saling lepas Suurballe
+│   ├── topologies/               # Definisi skrip arsitektur fisik jaringan Mininet
+│   |    ├── __init__.py
+│   |    ├── topo-diamond_lab.py   # Topologi Diamond (Baseline 2 Jalur Setara)
+│   |    └── topo-partial_mesh_lab.py # Topologi Partial Mesh (> 2 Jalur Kompleks)
+|   └── measurements/
+|        ├── Hasil_Pengambilan_Data.md     # Data yang diperoleh dari hasil uji
+|        ├── Panduan_Pengujian_Latency.md  # Panduan untuk memperoleh data latensi
+|        ├── grafik_laporan.py             # Skrip membuat grafik dari data yang sudah dikumpulkan
+|        └── panduan_cli.sh                # Panduan untuk keseluruhan metrik
+├── Dockerfile                    # Blueprint image Docker untuk emulasi Mininet & OSKen
+├── docker-compose.yml            # Orkestrasi container runtime environment
+├── entrypoint.sh                 # Skrip otomasi inisialisasi daemon kontainer
+├── README.md                     # Dokumentasi utama proyek
+└── PANDUAN_PENGUJIAN_SUURBALLE.md # Panduan manual khusus validasi algoritme Suurballe
 ```
-
----
-
-## Deskripsi Direktori
-
-### SPF/algorithms/
-
-Berisi implementasi algoritme pencarian jalur yang digunakan oleh controller.
-
-| Berkas          | Fungsi                                                               |
-| --------------- | -------------------------------------------------------------------- |
-| dijkstra.py     | Implementasi algoritme Dijkstra                                      |
-| bellman_ford.py | Implementasi algoritme Bellman-Ford                                  |
-| suurballe.py    | Implementasi algoritme Suurballe untuk pencarian jalur edge-disjoint |
-
-### SPF/controllers/
-
-Berisi implementasi controller OpenFlow berbasis OSKen.
-
-| Berkas            | Fungsi                                             |
-| ----------------- | -------------------------------------------------- |
-| multipath_spf.py  | Controller multipath berbasis OpenFlow Group Table |
-| shortest_path.py  | Controller single-path sebagai baseline            |
-| test_group_mod.py | Pengujian OpenFlow Group Modification              |
-
-### SPF/topologies/
-
-Berisi definisi topologi Mininet yang digunakan selama eksperimen.
-
-| Berkas                   | Fungsi                                                 |
-| ------------------------ | ------------------------------------------------------ |
-| topo-diamond_lab.py      | Topologi Diamond dengan dua jalur ekuivalen            |
-| topo-partial_mesh_lab.py | Topologi Partial Mesh dengan beberapa alternatif jalur |
-
----
 
 ## Spesifikasi Lingkungan Pengujian
 
@@ -250,11 +211,7 @@ Beberapa metrik yang digunakan dalam penelitian ini meliputi:
 
 * Waktu komputasi jalur.
 * Throughput jaringan.
-* Distribusi beban trafik.
-* Efektivitas load balancing.
-* Ketahanan terhadap kegagalan link.
-* Jumlah flow OpenFlow yang terinstal.
-* Pemanfaatan OpenFlow Group Table.
+* Distribusi beban trafik dan efektivitas load balancing.
 
 ---
 
